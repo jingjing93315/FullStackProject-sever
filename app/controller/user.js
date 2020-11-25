@@ -1,4 +1,4 @@
-"use strict"
+'use strict'
 const md5 = require('md5')
 const BaseController = require('./base')
 
