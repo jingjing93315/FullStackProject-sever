@@ -15,7 +15,10 @@ class UseController extends BaseController {
   async login() {
     // this.success('token')
     const { ctx, app } = this
-    const { email, captcha, password } = ctx.request.body
+    const { email, captcha, password, emailcode } = ctx.request.body
+    if (emailcode !== ctx.session.emailcode.toUpperCase()) {
+      return this.error('邮箱验证码错误')
+    }
     if (captcha.toUpperCase() !== ctx.session.captcha.toUpperCase()) {
       return this.error('验证码错误')
     }
@@ -75,7 +78,16 @@ class UseController extends BaseController {
     // 校验用户名是否存在
   }
 
-  // async info() {}
+  async info() {
+    // 可以获取header，解析
+    // 使用中间件
+    const { ctx } = this
+    const { email } = ctx.state
+    const user = await this.checkEmail(email)
+    this.success(user)
+
+  }
 }
 
 module.exports = UseController
+
